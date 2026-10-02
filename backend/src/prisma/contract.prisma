@@ -19,3 +19,11 @@ model Post {
   createdAt TimestamptzString @default(now())
   updatedAt temporal.updatedAtString()
 }
+
+model Expense {
+  id          Int      @id @default(autoincrement())
+  date        TimestamptzString @default(now())
+  description String
+  payer       String
+  amount      Float
+}
