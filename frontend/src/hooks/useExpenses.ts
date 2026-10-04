@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { Expense } from '../types/Expense';
 
-const host = import.meta.env.VITE_API_URL || 'https://expenso-backend-0v5f.onrender.com';
+const host = import.meta.env.VITE_API_URL || '';
 const API_BASE_URL = `${host}/api`;
 
 interface UseExpensesResult {

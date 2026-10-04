@@ -10,7 +10,8 @@
     "dev": "node --watch app.ts",
     "start": "node app.ts",
     "typecheck": "tsc --noEmit",
-    "contract:emit": "prisma contract emit"
+    "contract:emit": "prisma contract emit",
+    "build": "npm install && npx prisma db update"
   },
   "dependencies": {
     "@prisma/orm-postgres": "^8.0.0-rc.12",

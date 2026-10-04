@@ -1,12 +1,13 @@
 import fs from "fs";
 import type { Expense, NewExpense } from "../types/expense.ts";
+import { db } from "../src/prisma/db.ts";
 
 export class ExpensesService {
 
   private static dataPath = "./data/expenses.json";
   private static resetPath = "./data/expenses.init.json";
   
-  public static getExpenses(): Expense[] {
+  public static getExpenses() {
     return this.readExpenses();
   }
   
