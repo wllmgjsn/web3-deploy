@@ -1,6 +1,6 @@
 
 import express from "express";
-import type { Expense } from "../types/expense.ts";
+import type { Expense, NewExpense } from "../types/expense.ts";
 import { ExpensesService } from "../services/expenses.service.ts";
 import { isValidNewExpense } from "../guards/expenses.guard.ts";
 
@@ -18,13 +18,15 @@ expensesRouter.get("/", async (req, res) => {
 
 expensesRouter.post("/", async (req, res) => {
   try {
-    const expense: Expense = req.body;
+    const expense = req.body;
+    console.log("expense : ", expense);
     if (!isValidNewExpense(expense)) {
       return res.status(400).json({ error: "Invalid expense" });
     }
     const expenses = await ExpensesService.addExpense(expense);
     res.status(201).json(expenses);
   } catch (error) {
+    console.error(error)
     res.status(500).json({ error: "Internal server error" });
   } 
 });
