@@ -88,7 +88,7 @@ export default class M extends Migration<Start, End> {
         table: "Expense",
         column: "payerId",
       }),
-      this.dataTransform(endContract, "handle-nulls-User-name", {
+      this.dataTransform(contract, "handle-nulls-User-name", {
         check: () => placeholder("handle-nulls-User-name:check"),
         run: () => placeholder("handle-nulls-User-name:run"),
       }),
