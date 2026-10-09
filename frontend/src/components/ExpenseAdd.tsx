@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type SyntheticEvent } from "react";
+import { useState, type ChangeEvent } from "react";
 import type { NewExpense } from "../types/Expense";
 import { useForm } from "react-hook-form";
 
