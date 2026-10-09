@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import type { NewExpense } from "../types/Expense";
+import { useForm } from "react-hook-form";
 
 interface ExpenseAddProps {
   addExpense: (expense: NewExpense) => void;
@@ -21,24 +22,26 @@ function ExpenseAdd({ addExpense }: ExpenseAddProps) {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
 
-  const handleSubmit = (e: SyntheticEvent) => {
-    e.preventDefault();
-    const toAdd: NewExpense = {
-      date: new Date().toISOString(),
-      description: description,
-      payer: payer,
-      amount: Number(price.replace(',', '.')),
-    };
-    addExpense(toAdd);
-    console.log("Added expense :", toAdd);
-    clearForm();
-  };
+  const { handleSubmit } = useForm();
 
-  const clearForm = () => {
-    setPayer("");
-    setDescription("");
-    setPrice("");
-  }
+  // const handleSubmit = (e: SyntheticEvent) => {
+  //   e.preventDefault();
+  //   const toAdd: NewExpense = {
+  //     date: new Date().toISOString(),
+  //     description: description,
+  //     payer: payer,
+  //     amount: Number(price.replace(',', '.')),
+  //   };
+  //   addExpense(toAdd);
+  //   console.log("Added expense :", toAdd);
+  //   clearForm();
+  // };
+
+  // const clearForm = () => {
+  //   setPayer("");
+  //   setDescription("");
+  //   setPrice("");
+  // }
 
   return (
     <div>
@@ -53,7 +56,14 @@ function ExpenseAdd({ addExpense }: ExpenseAddProps) {
           padding: "1em",
           borderRadius: "1em",
         }}
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(async () => {
+          addExpense({
+            amount: Number(price.replace(",", ".")),
+            date: new Date().toISOString(),
+            description: description,
+            payer: payer,
+          } as NewExpense);
+        })}
       >
         <h2>Add a new Expense</h2>
         <input

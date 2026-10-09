@@ -12,6 +12,7 @@ expensesRouter.get("/", async (req, res) => {
     console.log("fetched from db : ", expenses);
     res.json(expenses);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -19,7 +20,6 @@ expensesRouter.get("/", async (req, res) => {
 expensesRouter.post("/", async (req, res) => {
   try {
     const expense = req.body;
-    console.log("expense : ", expense);
     if (!isValidNewExpense(expense)) {
       return res.status(400).json({ error: "Invalid expense" });
     }
