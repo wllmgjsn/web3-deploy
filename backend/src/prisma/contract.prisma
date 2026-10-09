@@ -14,7 +14,7 @@ model Expense {
   id           Int      @id @default(autoincrement())
   description  String
   amount       Float
-  date         DateTime @default(now())
+  date      TimestamptzString @default(now())
   payer        User     @relation("PayerExpenses", fields: [payerId], references: [id])
   payerId      Int
   participants User[]
@@ -44,7 +44,7 @@ model ExpenseUser {
 model Transfer {
   id        Int    @id @default(autoincrement())
   amount    Float
-  date      DateTime @default(now())
+  date      TimestamptzString @default(now())
   source    User   @relation("UserTransfersSource", fields: [sourceId], references: [id])
   sourceId  Int
   target    User   @relation("UserTransfersTarget", fields: [targetId], references: [id])
