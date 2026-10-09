@@ -1,4 +1,4 @@
-import type { NewExpense } from "../types/expense.ts";
+import type { NewExpense } from "../services/expenses.service.ts";
 
 export function isValidNewExpense(data: any): data is NewExpense {
    if (typeof data !== 'object' || data === null) {
@@ -6,9 +6,10 @@ export function isValidNewExpense(data: any): data is NewExpense {
   }
   const candidate = data as Record<string, unknown>;
   return (
-    typeof candidate.date === 'string' &&
+    (candidate.date === undefined ||
+      (typeof candidate.date === 'string' && !Number.isNaN(Date.parse(candidate.date)))) &&
     typeof candidate.description === 'string' &&
-    typeof candidate.payer === 'string' &&
+    Number.isInteger(candidate.payerId) &&
     typeof candidate.amount === 'number'
   );
 }

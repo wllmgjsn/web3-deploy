@@ -1,10 +1,9 @@
 export interface Expense {
-  id: string;
-  date: string;
+  id: number;
+  date: string; // ISO date, JSON serialization of DateTime
   description: string;
-  payer: string;
   amount: number;
+  payerId: number;
 }
 
-export type NewExpense = Omit<Expense, "id">;
-
+export type NewExpense = Omit<Expense, "id" | "date"> & { date?: string };

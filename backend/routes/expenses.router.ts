@@ -1,6 +1,5 @@
 
 import express from "express";
-import type { Expense, NewExpense } from "../types/expense.ts";
 import { ExpensesService } from "../services/expenses.service.ts";
 import { isValidNewExpense } from "../guards/expenses.guard.ts";
 
@@ -26,14 +25,18 @@ expensesRouter.post("/", async (req, res) => {
     const expenses = await ExpensesService.addExpense(expense);
     res.status(201).json(expenses);
   } catch (error) {
+    // 23503 = foreign key violation: payerId does not reference an existing user
+    if ((error as { sqlState?: string }).sqlState === "23503") {
+      return res.status(400).json({ error: "Unknown payer" });
+    }
     console.error(error)
     res.status(500).json({ error: "Internal server error" });
   } 
 });
 
-expensesRouter.post("/reset", (req, res) => {
+expensesRouter.post("/reset", async (req, res) => {
   try {
-    const expenses = ExpensesService.resetExpenses();
+    const expenses = await ExpensesService.resetExpenses();
     res.json(expenses);
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });

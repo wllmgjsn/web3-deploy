@@ -18,7 +18,7 @@ interface ExpenseAddProps {
 
 // Form component
 function ExpenseAdd({ addExpense }: ExpenseAddProps) {
-  const [payer, setPayer] = useState("");
+  const [payerId, setPayerId] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
 
@@ -61,16 +61,19 @@ function ExpenseAdd({ addExpense }: ExpenseAddProps) {
             amount: Number(price.replace(",", ".")),
             date: new Date().toISOString(),
             description: description,
-            payer: payer,
-          } as NewExpense);
+            payerId: Number(payerId),
+          });
         })}
       >
         <h2>Add a new Expense</h2>
         <input
-          value={payer}
-          placeholder="Enter payer here"
+          type="number"
+          min="1"
+          step="1"
+          value={payerId}
+          placeholder="Enter payer id here"
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setPayer(e.target.value)
+            setPayerId(e.target.value)
           }
           required
         ></input>

@@ -1,19 +1,25 @@
-import type { Expense, NewExpense } from "../types/expense.ts";
 import { db } from "../src/prisma/db.ts";
 
+export type NewExpense = {
+  description: string;
+  amount: number;
+  payerId: number; 
+  date?: string; // ISO timestamp
+};
+
 export class ExpensesService {
-  
-  public static async getExpenses() : Promise<Expense[]> {
+
+  public static async getExpenses() {
     return await db.orm.public.Expense.all();
   }
-  
-  public static async addExpense(newExpense: NewExpense): Promise<Expense> {
-    const created = await db.orm.public.Expense.create(newExpense);
+
+  public static async addExpense(expense: NewExpense) {
+    const created = await db.orm.public.Expense.create(expense);
     return created;
   }
-  
+
   public static async resetExpenses() {
-    return db.orm.public.Expense.where({}).deleteAll();
+    return await db.orm.public.Expense.where({}).deleteAll();
   }
-  
+
 }
