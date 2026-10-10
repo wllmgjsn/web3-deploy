@@ -8,7 +8,7 @@ const expensesRouter = express.Router();
 
 expensesRouter.get("/", async (req, res) => {
   try {
-    const filter = { payerId : Number(req.query.payerId), amount : Number(req.query.amount) } as ExpenseFilter;
+    const filter = { payerId : Number(req.query.payerId), amount : Number(req.query.amount), categoryId : Number(req.query.categoryId) } as ExpenseFilter;
     const expenses = await ExpensesService.getExpenses(filter);
     console.log("fetched from db : ", expenses);
     res.json(expenses);
@@ -21,15 +21,16 @@ expensesRouter.get("/", async (req, res) => {
 expensesRouter.post("/", async (req, res) => {
   try {
     const expense = req.body;
+    console.log(expense);
     if (!isValidNewExpense(expense)) {
       return res.status(400).json({ error: "Invalid expense" });
     }
     const expenses = await ExpensesService.addExpense(expense);
     res.status(201).json(expenses);
   } catch (error) {
-    // 23503 = foreign key violation: payerId does not reference an existing user
+    // 23503 = foreign key violation: payerId or categoryId does not reference an existing row
     if ((error as { sqlState?: string }).sqlState === "23503") {
-      return res.status(400).json({ error: "Unknown payer" });
+      return res.status(400).json({ error: "Unknown payer or category" });
     }
     console.error(error)
     res.status(500).json({ error: "Internal server error" });

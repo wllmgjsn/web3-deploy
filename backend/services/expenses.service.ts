@@ -4,12 +4,14 @@ export type NewExpense = {
   description: string;
   amount: number;
   payerId: number;
+  categoryId?: number | null;
   date?: string;
 };
 
 export type ExpenseFilter = {
   amount?: number;
   payerId?: number;
+  categoryId?: number;
 };
 
 export class ExpensesService {
@@ -20,6 +22,9 @@ export class ExpensesService {
     }
     if(filter.payerId && !isNaN(filter.payerId)){
       query = query.where((e) => e.payerId.eq(filter.payerId!));
+    }
+    if(filter.categoryId && !isNaN(filter.categoryId)){
+      query = query.where((e) => e.categoryId.eq(filter.categoryId!));
     }
     return await query.all();
   }

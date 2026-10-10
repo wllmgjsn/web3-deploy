@@ -1,6 +1,7 @@
-import { useState, type ChangeEvent } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 import type { NewExpense } from "../types/Expense";
 import { useForm } from "react-hook-form";
+import useCategories from "../hooks/useCategories";
 
 interface ExpenseAddProps {
   addExpense: (expense: NewExpense) => void;
@@ -21,27 +22,15 @@ function ExpenseAdd({ addExpense }: ExpenseAddProps) {
   const [payerId, setPayerId] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [categoryId, setCategoryId] = useState("");
 
   const { handleSubmit } = useForm();
 
-  // const handleSubmit = (e: SyntheticEvent) => {
-  //   e.preventDefault();
-  //   const toAdd: NewExpense = {
-  //     date: new Date().toISOString(),
-  //     description: description,
-  //     payer: payer,
-  //     amount: Number(price.replace(',', '.')),
-  //   };
-  //   addExpense(toAdd);
-  //   console.log("Added expense :", toAdd);
-  //   clearForm();
-  // };
+  const { categories } = useCategories();
 
-  // const clearForm = () => {
-  //   setPayer("");
-  //   setDescription("");
-  //   setPrice("");
-  // }
+  // useEffect(() => {
+  //   console.log(categoryId);
+  // }, [categoryId])
 
   return (
     <div>
@@ -60,8 +49,10 @@ function ExpenseAdd({ addExpense }: ExpenseAddProps) {
             date: new Date().toISOString(),
             description: description,
             payerId: Number(payerId),
+            categoryId: categoryId ? Number(categoryId) : null,
           });
           setPayerId("");
+          setCategoryId("");
           setDescription("");
           setPrice("");
         })}
@@ -94,6 +85,15 @@ function ExpenseAdd({ addExpense }: ExpenseAddProps) {
           }
           required
         ></input>
+        <select
+          value={categoryId}
+          onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+            setCategoryId(e.target.value)
+          }
+        >
+          <option value="">No category</option>
+          {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+        </select>
         <button
           type="submit"
           style={{ width: "fit-content", alignSelf: "center" }}

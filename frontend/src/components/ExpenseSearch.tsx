@@ -2,6 +2,7 @@ import { useState, type ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
 import type { ExpenseFilter } from "../hooks/useExpenses";
 import useUsers from "../hooks/useUsers";
+import useCategories from "../hooks/useCategories";
 
 interface ExpenseSearchProps {
   fetchExpenses: (filter?: ExpenseFilter) => Promise<void>;
@@ -10,8 +11,10 @@ interface ExpenseSearchProps {
 function ExpenseSearch({ fetchExpenses }: ExpenseSearchProps) {
   const [expenseAmountInput, setExpenseAmountInput] = useState("");
   const [payerIdInput, setPayerIdInput] = useState("");
+  const [categoryIdInput, setCategoryIdInput] = useState("");
 
   const { users } = useUsers();
+  const { categories } = useCategories();
 
   const { handleSubmit } = useForm();
 
@@ -30,6 +33,7 @@ function ExpenseSearch({ fetchExpenses }: ExpenseSearchProps) {
           await fetchExpenses({
             amount: expenseAmountInput ? Number(expenseAmountInput) : undefined,
             payerId: payerIdInput ? Number(payerIdInput) : undefined,
+            categoryId: categoryIdInput ? Number(categoryIdInput) : undefined,
           });
         })}
       >
@@ -40,9 +44,23 @@ function ExpenseSearch({ fetchExpenses }: ExpenseSearchProps) {
             setPayerIdInput(e.target.value)
           }
         >
+          <option value={""}>All expenses</option>
           {users.map((u) => (
             <option key={u.id} value={u.id}>
               {u.name}
+            </option>
+          ))}
+        </select>
+
+        <select
+          onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+            setCategoryIdInput(e.target.value)
+          }
+        >
+          <option value={""}>All categories</option>
+          {categories.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name}
             </option>
           ))}
         </select>
@@ -64,6 +82,7 @@ function ExpenseSearch({ fetchExpenses }: ExpenseSearchProps) {
             onClick={async () => {
               setExpenseAmountInput("");
               setPayerIdInput("");
+              setCategoryIdInput("");
               await fetchExpenses();
             }}
           >

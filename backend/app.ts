@@ -3,6 +3,7 @@ import logger from 'morgan';
 import cors from 'cors';
 import expensesRouter from './routes/expenses.router.ts';
 import usersRouter from './routes/users.router.ts';
+import categoriesRouter from './routes/categories.router.ts';
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.get('/ping', (req, res) => {
 
 app.use('/api/expenses', expensesRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/categories', categoriesRouter);
 
 app.listen(3000, () => {
   console.log('Server listening on http://localhost:3000');

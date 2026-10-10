@@ -17,6 +17,7 @@ interface UseExpensesResult {
 export type ExpenseFilter = {
   amount? : number,
   payerId? : number,
+  categoryId? : number,
 }
 
 function errorMessage(error: unknown): string {
@@ -28,13 +29,14 @@ function useExpenses(): UseExpensesResult {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchExpenses = useCallback(async ({amount, payerId} : ExpenseFilter = {}) => {
+  const fetchExpenses = useCallback(async ({amount, payerId, categoryId} : ExpenseFilter = {}) => {
     try {
       setLoading(true);
       setError(null);
       const params = new URLSearchParams();
       if (amount) params.set('amount', String(amount));
       if (payerId) params.set('payerId', String(payerId));
+      if (categoryId) params.set('categoryId', String(categoryId));
       const query = params.size > 0 ? `?${params}` : '';
       const response = await fetch(`${API_BASE_URL}/expenses${query}`);
       if (!response.ok) {

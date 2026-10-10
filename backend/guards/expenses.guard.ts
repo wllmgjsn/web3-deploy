@@ -10,6 +10,9 @@ export function isValidNewExpense(data: any): data is NewExpense {
       (typeof candidate.date === 'string' && !Number.isNaN(Date.parse(candidate.date)))) &&
     typeof candidate.description === 'string' &&
     Number.isInteger(candidate.payerId) &&
+    (candidate.categoryId === undefined ||
+      candidate.categoryId === null ||
+      Number.isInteger(candidate.categoryId)) &&
     typeof candidate.amount === 'number'
   );
 }
