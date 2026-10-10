@@ -48,9 +48,8 @@ function ExpenseAdd({ addExpense }: ExpenseAddProps) {
       <form
         style={{
           display: "flex",
-          flexDirection: "column",
-          width: "50%",
-          justifySelf: "center",
+          flexDirection: "column",          
+          width : '50%',
           gap: "1em",
           backgroundColor: "rgba(0, 0, 0, 0.1)",
           padding: "1em",

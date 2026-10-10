@@ -33,7 +33,7 @@ export default function ExpenseSorter({ setSortingAlgo }: ExpenseSorterProps) {
 
   return (
     <div>
-      <label htmlFor="sort-select">Sort:</label>
+      <label htmlFor="sort-select">Sort </label>
       <select id="sort-select" value={sortBy} onChange={handleSortChange}>
         <option value="date-newest">Chronological</option>
         <option value="date-oldest">Reverse chronological</option>

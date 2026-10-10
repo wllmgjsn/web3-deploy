@@ -42,16 +42,39 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #1a1a1a3d;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: border-color 0.25s, background-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #64ff646e;
+}
+button.danger:hover {
+  border-color: #ff6464;
+  background-color: #ff64641f;
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+dialog {
+  border: solid #ff6464 1px;
+  border-radius: 1em;
+  padding: 1.5em;
+  max-width: 24em;
+  background-color: #290e0e;
+}
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+dialog h2 {
+  margin-top: 0;
+}
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1em;
 }
 
 @media (prefers-color-scheme: light) {
