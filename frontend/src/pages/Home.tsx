@@ -5,13 +5,13 @@ import ExpenseAdd from "../components/ExpenseAdd";
 import useExpenses from "../hooks/useExpenses";
 import ExpenseReset from "../components/ExpenseReset";
 import ExpenseSorter from "../components/ExpenseSorter";
-import ExpenseAmountSearch from "../components/ExpenseSearch";
+import ExpenseSearch from "../components/ExpenseSearch";
 
 const menuItems = ["Add", "Search", "Reset"] as const;
 type MenuItem = (typeof menuItems)[number];
 
 function Home() {
-  const { expenses, addExpense, resetExpenses, setExpenses } = useExpenses();
+  const { expenses, addExpense, resetExpenses, fetchExpenses } = useExpenses();
   const [sortingAlgo, setSortingAlgo] = useState<
     (a: Expense, b: Expense) => number
   >(() => () => 1);
@@ -55,7 +55,7 @@ function Home() {
         </nav>
         {activeMenu === "Add" && <ExpenseAdd addExpense={addExpense} />}
         {activeMenu === "Search" && (
-          <ExpenseAmountSearch setExpenses={setExpenses} />
+          <ExpenseSearch fetchExpenses={fetchExpenses} />
         )}
         {activeMenu === "Reset" && (
           <ExpenseReset resetExpenses={resetExpenses} />

@@ -11,6 +11,12 @@ interface UseExpensesResult {
   addExpense: (expense: NewExpense) => Promise<void>;
   resetExpenses: () => Promise<void>;
   setExpenses : React.Dispatch<React.SetStateAction<Expense[]>>
+  fetchExpenses: (filter?: ExpenseFilter) => Promise<void>;
+}
+
+export type ExpenseFilter = {
+  amount? : number,
+  payerId? : number,
 }
 
 function errorMessage(error: unknown): string {
@@ -22,11 +28,15 @@ function useExpenses(): UseExpensesResult {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchExpenses = useCallback(async () => {
+  const fetchExpenses = useCallback(async ({amount, payerId} : ExpenseFilter = {}) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch(`${API_BASE_URL}/expenses`);
+      const params = new URLSearchParams();
+      if (amount) params.set('amount', String(amount));
+      if (payerId) params.set('payerId', String(payerId));
+      const query = params.size > 0 ? `?${params}` : '';
+      const response = await fetch(`${API_BASE_URL}/expenses${query}`);
       if (!response.ok) {
         throw new Error(`Failed to fetch expenses (${response.status})`);
       }
@@ -77,7 +87,7 @@ function useExpenses(): UseExpensesResult {
     }
   }, [fetchExpenses]);
 
-  return { expenses, loading, error, addExpense, resetExpenses, setExpenses};
+  return { expenses, loading, error, addExpense, resetExpenses, setExpenses, fetchExpenses};
 }
 
 export default useExpenses;

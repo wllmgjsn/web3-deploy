@@ -1,19 +1,16 @@
 import { useState, type ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
-import useExpenses from "../hooks/useExpenses";
-import type { Expense } from "../types/Expense";
+import type { ExpenseFilter } from "../hooks/useExpenses";
 
-interface ExpenseAddProps {
-  setExpenses : React.Dispatch<React.SetStateAction<Expense[]>>
+interface ExpenseSearchProps {
+  fetchExpenses: (filter?: ExpenseFilter) => Promise<void>;
 }
 
-function ExpenseAmountSearch({
-  setExpenses
-}: ExpenseAddProps) {
-  const [expenseAmount, setExpenseAmount] = useState("");
+function ExpenseSearch({ fetchExpenses }: ExpenseSearchProps) {
+  const [expenseAmountInput, setExpenseAmountInput] = useState("");
+  const [payerIdInput, setPayerIdInput] = useState("");
 
   const { handleSubmit } = useForm();
-  const { expenses } = useExpenses();
 
   return (
     <div>
@@ -27,34 +24,51 @@ function ExpenseAmountSearch({
           borderRadius: "1em",
         }}
         onSubmit={handleSubmit(async () => {
-          const amount = Number(expenseAmount);
-          if (!isNaN(amount)){
-            setExpenses(expenses.filter(e => e.amount >= amount));
-            setExpenseAmount("");
-          }
+          await fetchExpenses({
+            amount: expenseAmountInput ? Number(expenseAmountInput) : undefined,
+            payerId: payerIdInput ? Number(payerIdInput) : undefined,
+          });
         })}
       >
-        <h2>Minimum amount</h2>
+        <h2>Search expenses</h2>
+
         <input
           type="number"
-          step=".10"
-          value={expenseAmount}
-          placeholder="Enter amount"
+          step="1"
+          min={1}
+          value={payerIdInput}
+          placeholder="Enter payer ID"
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setExpenseAmount(e.target.value)
+            setPayerIdInput(e.target.value)
           }
-          required
         ></input>
 
-        <button
-          type="submit"
-          style={{ width: "fit-content", alignSelf: "center" }}
-        >
-          Search
-        </button>
+        <input
+          type="number"
+          step=".010"
+          value={expenseAmountInput}
+          placeholder="Enter minimum amount"
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setExpenseAmountInput(e.target.value)
+          }
+        ></input>
+
+        <div style={{ display: "flex", gap: "0.5em", alignSelf: "center" }}>
+          <button type="submit">Search</button>
+          <button
+            type="button"
+            onClick={async () => {
+              setExpenseAmountInput("");
+              setPayerIdInput("");
+              await fetchExpenses();
+            }}
+          >
+            Reset filter
+          </button>
+        </div>
       </form>
     </div>
   );
 }
 
-export default ExpenseAmountSearch;
+export default ExpenseSearch;
