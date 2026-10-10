@@ -1,6 +1,7 @@
 import { useState, type ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
 import type { ExpenseFilter } from "../hooks/useExpenses";
+import useUsers from "../hooks/useUsers";
 
 interface ExpenseSearchProps {
   fetchExpenses: (filter?: ExpenseFilter) => Promise<void>;
@@ -9,6 +10,8 @@ interface ExpenseSearchProps {
 function ExpenseSearch({ fetchExpenses }: ExpenseSearchProps) {
   const [expenseAmountInput, setExpenseAmountInput] = useState("");
   const [payerIdInput, setPayerIdInput] = useState("");
+
+  const { users } = useUsers();
 
   const { handleSubmit } = useForm();
 
@@ -32,16 +35,17 @@ function ExpenseSearch({ fetchExpenses }: ExpenseSearchProps) {
       >
         <h2>Search expenses</h2>
 
-        <input
-          type="number"
-          step="1"
-          min={1}
-          value={payerIdInput}
-          placeholder="Enter payer ID"
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+        <select
+          onChange={(e: ChangeEvent<HTMLSelectElement>) =>
             setPayerIdInput(e.target.value)
           }
-        ></input>
+        >
+          {users.map((u) => (
+            <option key={u.id} value={u.id}>
+              {u.name}
+            </option>
+          ))}
+        </select>
 
         <input
           type="number"
