@@ -7,11 +7,21 @@ export type NewExpense = {
   date?: string;
 };
 
+export type ExpenseFilter = {
+  amount?: number;
+  payerId?: number;
+};
+
 export class ExpensesService {
-  
-  public static async getExpenses(amount : number) {
-    if(!isNaN(amount)) return await (await db.orm.public.Expense.all()).filter(e => e.amount >= amount);
-    return ((await db.orm.public.Expense.all()))
+  public static async getExpenses(filter: ExpenseFilter) {
+    let query = db.orm.public.Expense;    // Stocke le point d'entrée de la table dans query
+    if (filter.amount && !isNaN(filter.amount)) {
+      query = query.where((e) => e.amount.gte(filter.amount!));
+    }
+    if(filter.payerId && !isNaN(filter.payerId)){
+      query = query.where((e) => e.payerId.eq(filter.payerId!));
+    }
+    return await query.all();
   }
 
   public static async addExpense(expense: NewExpense) {

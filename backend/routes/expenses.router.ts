@@ -2,12 +2,13 @@
 import express from "express";
 import { ExpensesService } from "../services/expenses.service.ts";
 import { isValidNewExpense } from "../guards/expenses.guard.ts";
+import type { ExpenseFilter } from "../services/expenses.service.ts";
 
 const expensesRouter = express.Router();
 
 expensesRouter.get("/", async (req, res) => {
   try {
-    const filter = Number(req.query.amount);
+    const filter = { payerId : Number(req.query.payerId), amount : Number(req.query.amount) } as ExpenseFilter;
     const expenses = await ExpensesService.getExpenses(filter);
     console.log("fetched from db : ", expenses);
     res.json(expenses);
