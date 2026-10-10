@@ -7,7 +7,8 @@ const expensesRouter = express.Router();
 
 expensesRouter.get("/", async (req, res) => {
   try {
-    const expenses = await ExpensesService.getExpenses();
+    const filter = Number(req.query.amount);
+    const expenses = await ExpensesService.getExpenses(filter);
     console.log("fetched from db : ", expenses);
     res.json(expenses);
   } catch (error) {

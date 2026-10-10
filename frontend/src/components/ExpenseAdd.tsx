@@ -48,8 +48,7 @@ function ExpenseAdd({ addExpense }: ExpenseAddProps) {
       <form
         style={{
           display: "flex",
-          flexDirection: "column",          
-          width : '50%',
+          flexDirection: "column",
           gap: "1em",
           backgroundColor: "rgba(0, 0, 0, 0.1)",
           padding: "1em",
@@ -62,6 +61,9 @@ function ExpenseAdd({ addExpense }: ExpenseAddProps) {
             description: description,
             payerId: Number(payerId),
           });
+          setPayerId("");
+          setDescription("");
+          setPrice("");
         })}
       >
         <h2>Add a new Expense</h2>

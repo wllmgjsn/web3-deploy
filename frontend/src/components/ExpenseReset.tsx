@@ -23,7 +23,7 @@ function ExpenseReset({ resetExpenses }: ExpenseResetProps) {
         <div className="dialog-actions">
           <button onClick={() => dialogRef.current?.close()}>Cancel</button>
           <button
-            className="danger"
+            className="dialog-danger"
             onClick={async () => {
               dialogRef.current?.close();
               await resetExpenses();

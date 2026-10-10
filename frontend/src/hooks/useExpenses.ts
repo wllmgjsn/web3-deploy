@@ -10,6 +10,7 @@ interface UseExpensesResult {
   error: string | null;
   addExpense: (expense: NewExpense) => Promise<void>;
   resetExpenses: () => Promise<void>;
+  setExpenses : React.Dispatch<React.SetStateAction<Expense[]>>
 }
 
 function errorMessage(error: unknown): string {
@@ -76,7 +77,7 @@ function useExpenses(): UseExpensesResult {
     }
   }, [fetchExpenses]);
 
-  return { expenses, loading, error, addExpense, resetExpenses };
+  return { expenses, loading, error, addExpense, resetExpenses, setExpenses};
 }
 
 export default useExpenses;

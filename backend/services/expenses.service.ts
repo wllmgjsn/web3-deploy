@@ -4,13 +4,14 @@ export type NewExpense = {
   description: string;
   amount: number;
   payerId: number;
-  date?: string; // ISO timestamp
+  date?: string;
 };
 
 export class ExpensesService {
   
-  public static async getExpenses() {
-    return await db.orm.public.Expense.all();
+  public static async getExpenses(amount : number) {
+    if(!isNaN(amount)) return await (await db.orm.public.Expense.all()).filter(e => e.amount >= amount);
+    return ((await db.orm.public.Expense.all()))
   }
 
   public static async addExpense(expense: NewExpense) {

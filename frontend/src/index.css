@@ -47,7 +47,7 @@ button {
   transition: border-color 0.25s, background-color 0.25s;
 }
 button:hover {
-  border-color: #64ff646e;
+  border-color: #64b9ff6e;
 }
 button.danger:hover {
   border-color: #ff6464;
@@ -59,12 +59,20 @@ button:focus-visible {
 }
 
 dialog {
-  border: solid #ff6464 1px;
+  border: none;
   border-radius: 1em;
   padding: 1.5em;
   max-width: 24em;
-  background-color: #290e0e;
+  background-color: #000000;
+  color : white
 }
+
+button.dialog-danger:hover{
+  border-color: #ff6464;
+  background-color: #9b63639a;
+  color :white
+}
+
 dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.5);
 }
