@@ -10,7 +10,6 @@ expensesRouter.get("/", async (req, res) => {
   try {
     const filter = { payerId : Number(req.query.payerId), amount : Number(req.query.amount), categoryId : Number(req.query.categoryId) } as ExpenseFilter;
     const expenses = await ExpensesService.getExpenses(filter);
-    console.log("fetched from db : ", expenses);
     res.json(expenses);
   } catch (error) {
     console.error(error);

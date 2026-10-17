@@ -1,8 +1,7 @@
 import { useState, type ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
 import type { ExpenseFilter } from "../hooks/useExpenses";
-import useUsers from "../hooks/useUsers";
-import useCategories from "../hooks/useCategories";
+import useAppContext from "../hooks/useAppContext";
 
 interface ExpenseSearchProps {
   fetchExpenses: (filter?: ExpenseFilter) => Promise<void>;
@@ -13,8 +12,7 @@ function ExpenseSearch({ fetchExpenses }: ExpenseSearchProps) {
   const [payerIdInput, setPayerIdInput] = useState("");
   const [categoryIdInput, setCategoryIdInput] = useState("");
 
-  const { users } = useUsers();
-  const { categories } = useCategories();
+  const { users, categories } = useAppContext();
 
   const { handleSubmit } = useForm();
 

@@ -1,7 +1,7 @@
 import { useState, type ChangeEvent } from "react";
 import type { NewExpense } from "../types/Expense";
 import { useForm } from "react-hook-form";
-import useCategories from "../hooks/useCategories";
+import useAppContext from "../hooks/useAppContext";
 
 interface ExpenseAddProps {
   addExpense: (expense: NewExpense) => void;
@@ -26,7 +26,7 @@ function ExpenseAdd({ addExpense }: ExpenseAddProps) {
 
   const { handleSubmit } = useForm();
 
-  const { categories } = useCategories();
+  const { categories } = useAppContext();
 
   // useEffect(() => {
   //   console.log(categoryId);

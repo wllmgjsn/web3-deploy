@@ -2,8 +2,7 @@
  * A simple component to display an expense item
  */
 
-import useCategories from "../hooks/useCategories";
-import useUsers from "../hooks/useUsers";
+import useAppContext from "../hooks/useAppContext";
 import type { Expense } from "../types/Expense";
 
 interface ExpenseItemProps {
@@ -12,8 +11,7 @@ interface ExpenseItemProps {
 
 function ExpenseItem({ expense }: ExpenseItemProps) {
   
-  const { users } = useUsers();
-  const { categories } = useCategories(); 
+  const { users, categories } = useAppContext();
   
   return <div>
     <h3>Expense {expense.id}</h3>
