@@ -11,10 +11,10 @@ async function main() {
   await orm.User.where({}).deleteAll();
 
   // Users
-  const alice = await orm.User.create({ name: "Alice", email: "alice@example.com", bankAccount: "BE68 5390 0754 7034" });
-  const bob = await orm.User.create({ name: "Bob", email: "bob@example.com", bankAccount: "BE71 0961 2345 6769" });
-  const charlie = await orm.User.create({ name: "Charlie", email: "charlie@example.com" });
-  const diana = await orm.User.create({ name: "Diana", email: "diana@example.com" });
+  const alice = await orm.User.create({ id : 1, name: "Alice", email: "alice@example.com", bankAccount: "BE68 5390 0754 7034" });
+  const bob = await orm.User.create({ id : 2, name: "Bob", email: "bob@example.com", bankAccount: "BE71 0961 2345 6769" });
+  const charlie = await orm.User.create({ id : 3, name: "Charlie", email: "charlie@example.com" });
+  const diana = await orm.User.create({ id : 4, name: "Diana", email: "diana@example.com" });
 
   // Categories
   const food = await orm.Category.create({ name: "Food", colour: "#f97316" });

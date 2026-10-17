@@ -7,11 +7,11 @@
     "node": "24.x"
   },
   "scripts": {
-    "dev": "node --watch app.ts",
+    "dev": "npx tsx src/prisma/populate.ts && node --watch app.ts",
     "start": "node app.ts",
     "typecheck": "tsc --noEmit",
     "contract:emit": "prisma contract emit",
-    "build": "npm install && npx prisma db migrate"
+    "build": "npm install && npx tsx src/prisma/populate.ts && npx prisma db migrate"
   },
   "dependencies": {
     "@prisma/orm-postgres": "^8.0.0-rc.12",
