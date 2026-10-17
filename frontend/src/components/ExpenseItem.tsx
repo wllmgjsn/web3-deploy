@@ -20,7 +20,7 @@ function ExpenseItem({ expense }: ExpenseItemProps) {
     {/* amount must be restricted to 2 decimal places */}
     <p>Amount: {expense.amount.toFixed(2)}</p>
     <p>Payer: {users.find(u => u.id === expense.payerId)?.name}</p>
-    <p>Category : {categories.find(c => c.id === expense.categoryId)?.name}</p>
+    <p>Category : {categories.find(c => c.id === expense.categoryId)?.name ?? 'Unknown'}</p>
   </div>;
 }
 
