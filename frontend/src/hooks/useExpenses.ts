@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import type { Expense, NewExpense } from '../types/Expense';
 
 const host = import.meta.env.VITE_API_URL;
@@ -52,9 +52,11 @@ function useExpenses(): UseExpensesResult {
   }, []);
 
   // Runs once on mount to load the initial expense list.
-  useEffect(() => {
-    fetchExpenses();
-  }, [fetchExpenses]);
+  // FLAW : The component renders first, with an empty list, and the data arrives later
+  // SOLUTION : Use a loader : 
+  // useEffect(() => {
+  //   fetchExpenses();
+  // }, [fetchExpenses]);
 
   const addExpense = useCallback(
     async (expense: NewExpense) => {

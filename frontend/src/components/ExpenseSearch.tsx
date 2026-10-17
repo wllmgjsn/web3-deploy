@@ -1,20 +1,44 @@
-import { useState, type ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
-import type { ExpenseFilter } from "../hooks/useExpenses";
 import useAppContext from "../hooks/useAppContext";
+import { useSearchParams } from "react-router-dom";
 
-interface ExpenseSearchProps {
-  fetchExpenses: (filter?: ExpenseFilter) => Promise<void>;
+interface SearchFormValues {
+  amount?: number;
+  payerId?: string;
+  categoryId?: string;
 }
 
-function ExpenseSearch({ fetchExpenses }: ExpenseSearchProps) {
-  const [expenseAmountInput, setExpenseAmountInput] = useState("");
-  const [payerIdInput, setPayerIdInput] = useState("");
-  const [categoryIdInput, setCategoryIdInput] = useState("");
+function ExpenseSearch() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const { register, handleSubmit, reset } = useForm<SearchFormValues>({
+    // keep the form in sync with the URL when the page is opened with filters already set
+    defaultValues: {
+      amount: searchParams.get("amount")
+        ? Number(searchParams.get("amount"))
+        : undefined,
+      payerId: searchParams.get("payerId") ?? "",
+      categoryId: searchParams.get("categoryId") ?? "",
+    },
+  });
 
   const { users, categories } = useAppContext();
 
-  const { handleSubmit } = useForm();
+  const onSubmit = (data: SearchFormValues) => {
+    // Only the filters the user actually filled in go into the URL.
+    const filter: Record<string, string> = {};
+    if (data.amount) filter.amount = String(data.amount);
+    if (data.payerId) filter.payerId = data.payerId;
+    if (data.categoryId) filter.categoryId = data.categoryId;
+
+    // Changing the URL makes React Router re-run the route loader.
+    setSearchParams(filter);
+  };
+
+  const onReset = () => {
+    reset({ amount: undefined, payerId: "", categoryId: "" });
+    setSearchParams({});
+  };
 
   return (
     <div>
@@ -27,21 +51,12 @@ function ExpenseSearch({ fetchExpenses }: ExpenseSearchProps) {
           padding: "1em",
           borderRadius: "1em",
         }}
-        onSubmit={handleSubmit(async () => {
-          await fetchExpenses({
-            amount: expenseAmountInput ? Number(expenseAmountInput) : undefined,
-            payerId: payerIdInput ? Number(payerIdInput) : undefined,
-            categoryId: categoryIdInput ? Number(categoryIdInput) : undefined,
-          });
-        })}
+        onSubmit={handleSubmit(onSubmit)}
       >
         <h2>Search expenses</h2>
 
-        <select
-          onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-            setPayerIdInput(e.target.value)
-          }
-        >
+        {/* An untouched select gives `""`*/}
+        <select {...register("payerId")}>
           <option value={""}>All expenses</option>
           {users.map((u) => (
             <option key={u.id} value={u.id}>
@@ -50,11 +65,7 @@ function ExpenseSearch({ fetchExpenses }: ExpenseSearchProps) {
           ))}
         </select>
 
-        <select
-          onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-            setCategoryIdInput(e.target.value)
-          }
-        >
+        <select {...register("categoryId")}>
           <option value={""}>All categories</option>
           {categories.map((c) => (
             <option key={c.id} value={c.id}>
@@ -65,25 +76,14 @@ function ExpenseSearch({ fetchExpenses }: ExpenseSearchProps) {
 
         <input
           type="number"
-          step=".010"
-          value={expenseAmountInput}
+          step=".01"
           placeholder="Enter minimum amount"
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setExpenseAmountInput(e.target.value)
-          }
+          {...register("amount", { valueAsNumber: true })}
         ></input>
 
         <div style={{ display: "flex", gap: "0.5em", alignSelf: "center" }}>
           <button type="submit">Search</button>
-          <button
-            type="button"
-            onClick={async () => {
-              setExpenseAmountInput("");
-              setPayerIdInput("");
-              setCategoryIdInput("");
-              await fetchExpenses();
-            }}
-          >
+          <button type="button" onClick={onReset}>
             Reset filter
           </button>
         </div>

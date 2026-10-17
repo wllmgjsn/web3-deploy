@@ -1,34 +1,21 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import ExpenseListPage from "./pages/ExpensesPage";
-import ExpensePage from "./pages/ExpensePage";
-import NewExpensePage from "./pages/NewExpensePage";
-import App from "./App";
-import Home from "./pages/Home";
-  
+import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom";
+import ExpenseList from "./pages/expenses/ExpenseList";
+import ExpenseShow from "./pages/expenses/ExpenseShow";
+import ExpenseNew from "./pages/expenses/ExpenseNew";
+import Layout from "./pages/Layout";
+import { expenseListLoader } from "./pages/expenses/ExpenseList.loader";
+
 const router = createBrowserRouter([
   {
-    path: "",
-    element: <App></App>,
+    Component: Layout,
     children: [
-      {
-        path: "/",
-        element: <Home></Home>,
-      },
-      {
-        path: "expenses",
-        element: <ExpenseListPage></ExpenseListPage>,
-      },
-      {
-        path: "expenses/:id",
-        element: <ExpensePage></ExpensePage>,
-      },
-      {
-        path: "expenses/new",
-        element: <NewExpensePage></NewExpensePage>,
-      },
+      { index: true, element: <Navigate to="/expenses" replace /> },
+      { path: "expenses", Component: ExpenseList, loader : expenseListLoader },
+      { path: "expenses/:id", Component: ExpenseShow },
+      { path: "expenses/new", Component: ExpenseNew },
     ],
   },
 ]);
@@ -36,7 +23,7 @@ const router = createBrowserRouter([
 // StrictMode doubles the number of requests in development mode, which is useful for testing the idempotency of your API endpoints.
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode> 
+  <StrictMode>
     <RouterProvider router={router}></RouterProvider>
   </StrictMode>,
 );
