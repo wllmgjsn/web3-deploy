@@ -12,16 +12,8 @@
       "model": "Expense",
       "namespace": "public"
     },
-    "ExpenseUser": {
-      "model": "ExpenseUser",
-      "namespace": "public"
-    },
-    "Post": {
-      "model": "Post",
-      "namespace": "public"
-    },
-    "Transfer": {
-      "model": "Transfer",
+    "Participation": {
+      "model": "Participation",
       "namespace": "public"
     },
     "User": {
@@ -170,7 +162,7 @@
                   "parentColumns": [
                     "expenseId"
                   ],
-                  "table": "ExpenseUser",
+                  "table": "Participation",
                   "targetColumns": [
                     "id"
                   ]
@@ -222,7 +214,7 @@
               "table": "Expense"
             }
           },
-          "ExpenseUser": {
+          "Participation": {
             "fields": {
               "expenseId": {
                 "nullable": false,
@@ -283,189 +275,7 @@
                 }
               },
               "namespaceId": "public",
-              "table": "ExpenseUser"
-            }
-          },
-          "Post": {
-            "fields": {
-              "authorId": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/int4@1",
-                  "kind": "scalar"
-                }
-              },
-              "content": {
-                "nullable": true,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                }
-              },
-              "createdAt": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/timestamptz-string@1",
-                  "kind": "scalar"
-                }
-              },
-              "id": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/int4@1",
-                  "kind": "scalar"
-                }
-              },
-              "title": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                }
-              },
-              "updatedAt": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/timestamptz-string@1",
-                  "kind": "scalar"
-                }
-              }
-            },
-            "relations": {
-              "author": {
-                "cardinality": "N:1",
-                "nullable": false,
-                "on": {
-                  "localFields": [
-                    "authorId"
-                  ],
-                  "targetFields": [
-                    "id"
-                  ]
-                },
-                "to": {
-                  "model": "User",
-                  "namespace": "public"
-                }
-              }
-            },
-            "storage": {
-              "fields": {
-                "authorId": {
-                  "column": "authorId"
-                },
-                "content": {
-                  "column": "content"
-                },
-                "createdAt": {
-                  "column": "createdAt"
-                },
-                "id": {
-                  "column": "id"
-                },
-                "title": {
-                  "column": "title"
-                },
-                "updatedAt": {
-                  "column": "updatedAt"
-                }
-              },
-              "namespaceId": "public",
-              "table": "Post"
-            }
-          },
-          "Transfer": {
-            "fields": {
-              "amount": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/float8@1",
-                  "kind": "scalar"
-                }
-              },
-              "date": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/timestamptz-string@1",
-                  "kind": "scalar"
-                }
-              },
-              "id": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/int4@1",
-                  "kind": "scalar"
-                }
-              },
-              "sourceId": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/int4@1",
-                  "kind": "scalar"
-                }
-              },
-              "targetId": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/int4@1",
-                  "kind": "scalar"
-                }
-              }
-            },
-            "relations": {
-              "source": {
-                "cardinality": "N:1",
-                "nullable": false,
-                "on": {
-                  "localFields": [
-                    "sourceId"
-                  ],
-                  "targetFields": [
-                    "id"
-                  ]
-                },
-                "to": {
-                  "model": "User",
-                  "namespace": "public"
-                }
-              },
-              "target": {
-                "cardinality": "N:1",
-                "nullable": false,
-                "on": {
-                  "localFields": [
-                    "targetId"
-                  ],
-                  "targetFields": [
-                    "id"
-                  ]
-                },
-                "to": {
-                  "model": "User",
-                  "namespace": "public"
-                }
-              }
-            },
-            "storage": {
-              "fields": {
-                "amount": {
-                  "column": "amount"
-                },
-                "date": {
-                  "column": "date"
-                },
-                "id": {
-                  "column": "id"
-                },
-                "sourceId": {
-                  "column": "sourceId"
-                },
-                "targetId": {
-                  "column": "targetId"
-                }
-              },
-              "namespaceId": "public",
-              "table": "Transfer"
+              "table": "Participation"
             }
           },
           "User": {
@@ -516,60 +326,17 @@
                 }
               },
               "participatedExpenses": {
-                "cardinality": "N:M",
+                "cardinality": "1:N",
                 "on": {
                   "localFields": [
                     "id"
                   ],
                   "targetFields": [
-                    "userId"
-                  ]
-                },
-                "through": {
-                  "childColumns": [
-                    "expenseId"
-                  ],
-                  "namespaceId": "public",
-                  "parentColumns": [
-                    "userId"
-                  ],
-                  "table": "ExpenseUser",
-                  "targetColumns": [
-                    "id"
+                    "payerId"
                   ]
                 },
                 "to": {
                   "model": "Expense",
-                  "namespace": "public"
-                }
-              },
-              "transfersIn": {
-                "cardinality": "1:N",
-                "on": {
-                  "localFields": [
-                    "id"
-                  ],
-                  "targetFields": [
-                    "targetId"
-                  ]
-                },
-                "to": {
-                  "model": "Transfer",
-                  "namespace": "public"
-                }
-              },
-              "transfersOut": {
-                "cardinality": "1:N",
-                "on": {
-                  "localFields": [
-                    "id"
-                  ],
-                  "targetFields": [
-                    "sourceId"
-                  ]
-                },
-                "to": {
-                  "model": "Transfer",
                   "namespace": "public"
                 }
               }
@@ -739,7 +506,7 @@
               },
               "uniques": []
             },
-            "ExpenseUser": {
+            "Participation": {
               "columns": {
                 "expenseId": {
                   "codecId": "pg/int4@1",
@@ -760,7 +527,7 @@
                       "expenseId"
                     ],
                     "namespaceId": "public",
-                    "tableName": "ExpenseUser"
+                    "tableName": "Participation"
                   },
                   "target": {
                     "columns": [
@@ -777,7 +544,7 @@
                       "userId"
                     ],
                     "namespaceId": "public",
-                    "tableName": "ExpenseUser"
+                    "tableName": "Participation"
                   },
                   "target": {
                     "columns": [
@@ -793,16 +560,16 @@
                   "columns": [
                     "expenseId"
                   ],
-                  "name": "ExpenseUser_expenseId_idx_69d413fa",
-                  "prefix": "ExpenseUser_expenseId_idx",
+                  "name": "Participation_expenseId_idx_69d413fa",
+                  "prefix": "Participation_expenseId_idx",
                   "unique": false
                 },
                 {
                   "columns": [
                     "userId"
                   ],
-                  "name": "ExpenseUser_userId_idx_a489d58a",
-                  "prefix": "ExpenseUser_userId_idx",
+                  "name": "Participation_userId_idx_a489d58a",
+                  "prefix": "Participation_userId_idx",
                   "unique": false
                 }
               ],
@@ -810,177 +577,6 @@
                 "columns": [
                   "expenseId",
                   "userId"
-                ]
-              },
-              "uniques": []
-            },
-            "Post": {
-              "columns": {
-                "authorId": {
-                  "codecId": "pg/int4@1",
-                  "nativeType": "int4",
-                  "nullable": false
-                },
-                "content": {
-                  "codecId": "pg/text@1",
-                  "nativeType": "text",
-                  "nullable": true
-                },
-                "createdAt": {
-                  "codecId": "pg/timestamptz-string@1",
-                  "default": {
-                    "expression": "now()",
-                    "kind": "function"
-                  },
-                  "nativeType": "timestamptz",
-                  "nullable": false
-                },
-                "id": {
-                  "codecId": "pg/int4@1",
-                  "default": {
-                    "expression": "autoincrement()",
-                    "kind": "function"
-                  },
-                  "nativeType": "int4",
-                  "nullable": false
-                },
-                "title": {
-                  "codecId": "pg/text@1",
-                  "nativeType": "text",
-                  "nullable": false
-                },
-                "updatedAt": {
-                  "codecId": "pg/timestamptz-string@1",
-                  "nativeType": "timestamptz",
-                  "nullable": false
-                }
-              },
-              "foreignKeys": [
-                {
-                  "source": {
-                    "columns": [
-                      "authorId"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "Post"
-                  },
-                  "target": {
-                    "columns": [
-                      "id"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "User"
-                  }
-                }
-              ],
-              "indexes": [
-                {
-                  "columns": [
-                    "authorId"
-                  ],
-                  "name": "Post_authorId_idx_e47547ed",
-                  "prefix": "Post_authorId_idx",
-                  "unique": false
-                }
-              ],
-              "primaryKey": {
-                "columns": [
-                  "id"
-                ]
-              },
-              "uniques": []
-            },
-            "Transfer": {
-              "columns": {
-                "amount": {
-                  "codecId": "pg/float8@1",
-                  "nativeType": "float8",
-                  "nullable": false
-                },
-                "date": {
-                  "codecId": "pg/timestamptz-string@1",
-                  "default": {
-                    "expression": "now()",
-                    "kind": "function"
-                  },
-                  "nativeType": "timestamptz",
-                  "nullable": false
-                },
-                "id": {
-                  "codecId": "pg/int4@1",
-                  "default": {
-                    "expression": "autoincrement()",
-                    "kind": "function"
-                  },
-                  "nativeType": "int4",
-                  "nullable": false
-                },
-                "sourceId": {
-                  "codecId": "pg/int4@1",
-                  "nativeType": "int4",
-                  "nullable": false
-                },
-                "targetId": {
-                  "codecId": "pg/int4@1",
-                  "nativeType": "int4",
-                  "nullable": false
-                }
-              },
-              "foreignKeys": [
-                {
-                  "source": {
-                    "columns": [
-                      "sourceId"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "Transfer"
-                  },
-                  "target": {
-                    "columns": [
-                      "id"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "User"
-                  }
-                },
-                {
-                  "source": {
-                    "columns": [
-                      "targetId"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "Transfer"
-                  },
-                  "target": {
-                    "columns": [
-                      "id"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "User"
-                  }
-                }
-              ],
-              "indexes": [
-                {
-                  "columns": [
-                    "sourceId"
-                  ],
-                  "name": "Transfer_sourceId_idx_d92a2571",
-                  "prefix": "Transfer_sourceId_idx",
-                  "unique": false
-                },
-                {
-                  "columns": [
-                    "targetId"
-                  ],
-                  "name": "Transfer_targetId_idx_9852d518",
-                  "prefix": "Transfer_targetId_idx",
-                  "unique": false
-                }
-              ],
-              "primaryKey": {
-                "columns": [
-                  "id"
                 ]
               },
               "uniques": []
@@ -1033,29 +629,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "d54df8a71add9b12c0e93ed71b3ccfeaf4ed6ad7a4fedad5e38988d4b6f2d68d"
-  },
-  "execution": {
-    "executionHash": "101edc330a2a0bb8b6ba440d61c8db45bf088ec5e991a4e997225e995d295a43",
-    "mutations": {
-      "defaults": [
-        {
-          "onCreate": {
-            "id": "timestampNow",
-            "kind": "generator"
-          },
-          "onUpdate": {
-            "id": "timestampNow",
-            "kind": "generator"
-          },
-          "ref": {
-            "column": "updatedAt",
-            "namespace": "public",
-            "table": "Post"
-          }
-        }
-      ]
-    }
+    "storageHash": "032f0441b8915cefed82b6ada4ffbb1204ff5016174939d69741e7d1a51fb17f"
   },
   "capabilities": {
     "postgres": {
