@@ -31,6 +31,8 @@ function ExpenseList() {
         display: "flex",
         flexWrap: "wrap",
         gap: "2em",
+        justifyContent: "center",
+        alignItems: "flex-start",
       }}
     >
       <div

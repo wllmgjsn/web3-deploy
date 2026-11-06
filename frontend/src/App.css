@@ -1,42 +1,72 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  padding: 0 2rem 2rem;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* ---------- Top navigation (Layout) ---------- */
+#root > div > nav {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#root > div > nav a {
+  padding: 0.45em 1em;
+  border-radius: 8px;
+  color: var(--text-muted);
+  transition: background-color 0.2s, color 0.2s;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+#root > div > nav a:hover {
+  background-color: var(--surface-muted);
+  color: var(--text);
 }
 
-.card {
-  padding: 2em;
+#root > div > nav a.active {
+  background-color: var(--primary-soft);
+  color: var(--primary);
 }
 
-.read-the-docs {
-  color: #888;
+/* ---------- Cards (forms and expense list panel) ---------- */
+/* Override the inline translucent-black backgrounds so panels read as white cards. */
+main form,
+main div[style*="overflow"] {
+  background-color: var(--surface) !important;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+main form {
+  min-width: 18em;
+}
+
+main form select,
+main form input {
+  width: 100%;
+}
+
+/* ---------- Expense list ---------- */
+main ul {
+  list-style: none;
+  margin: 1em 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75em;
+}
+
+main li {
+  padding: 0.9em 1em;
+  background-color: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+main li p {
+  margin: 0.1em 0;
+  font-size: 0.92em;
+  color: var(--text-muted);
 }
