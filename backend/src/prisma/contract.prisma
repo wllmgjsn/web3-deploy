@@ -1,12 +1,12 @@
 // use prisma-8
-model Post {
-  id        Int                        @id @default(autoincrement())
-  title     String
-  content   String?
-  author    User                       @relation(fields:[authorId], references:[id])
-  authorId  Int
-  createdAt TimestamptzString          @default(now())
-  updatedAt temporal.updatedAtString()
+
+model User {
+  id                   Int       @id @default(autoincrement())
+  name                 String
+  email                String    @unique
+  bankAccount          String? // optional
+  participatedExpenses Expense[]
+  paidExpenses         Expense[]
 }
 
 model Expense {
@@ -14,10 +14,10 @@ model Expense {
   description  String
   amount       Float
   date         TimestamptzString @default(now())
-  payer        User              @relation("PayerExpenses", fields:[payerId], references:[id])
+  payer        User              @relation(fields:[payerId], references:[id])
   payerId      Int
   participants User[]
-  category     Category?         @relation("ExpenseCategory", fields:[categoryId], references:[id])
+  category     Category?         @relation(fields:[categoryId], references:[id])
   categoryId   Int?
 }
 
@@ -25,36 +25,14 @@ model Category {
   id       Int       @id @default(autoincrement())
   name     String    @unique
   colour   String
-  expenses Expense[] @relation("ExpenseCategory")
+  expenses Expense[]
 }
 
-model User {
-  id                   Int        @id @default(autoincrement())
-  name                 String
-  email                String     @unique
-  bankAccount          String? // optional
-
-  transfersOut         Transfer[] @relation("UserTransfersSource")
-  transfersIn          Transfer[] @relation("UserTransfersTarget")
-  participatedExpenses Expense[]  @relation("ParticipantExpenses")
-  paidExpenses         Expense[]  @relation("PayerExpenses")
-}
-
-model ExpenseUser {
+model Participation {
   expenseId Int
   userId    Int
-  expense   Expense @relation("ParticipantExpenses", fields:[expenseId], references:[id], onDelete: Cascade)
-  user      User    @relation("ParticipantExpenses", fields:[userId], references:[id], onDelete: Cascade)
+  expense   Expense @relation(fields:[expenseId], references:[id], onDelete: Cascade)
+  user      User    @relation(fields:[userId], references:[id], onDelete: Cascade)
 
   @@id([expenseId, userId])
-}
-
-model Transfer {
-  id       Int               @id @default(autoincrement())
-  amount   Float
-  date     TimestamptzString @default(now())
-  source   User              @relation("UserTransfersSource", fields:[sourceId], references:[id])
-  sourceId Int
-  target   User              @relation("UserTransfersTarget", fields:[targetId], references:[id])
-  targetId Int
 }

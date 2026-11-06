@@ -4,8 +4,6 @@ const orm = db.orm.public;
 
 async function main() {
   // Vide la base (ordre des clés étrangères)
-  await orm.ExpenseUser.where({}).deleteAll();
-  await orm.Transfer.where({}).deleteAll();
   await orm.Expense.where({}).deleteAll();
   await orm.Category.where({}).deleteAll();
   await orm.User.where({}).deleteAll();
@@ -37,16 +35,10 @@ async function main() {
       payerId: e.payer.id,
       categoryId: e.category ? e.category.id : null,
     });
-    await orm.ExpenseUser.createAll(
+    await orm.Participation.createAll(
       e.participants.map((u) => ({ expenseId: expense.id, userId: u.id })),
     );
   }
-
-  // Transfers
-  await orm.Transfer.createAll([
-    { amount: 28.1, date: "2025-01-18", sourceId: bob.id, targetId: alice.id },
-    { amount: 30, date: "2025-01-25", sourceId: diana.id, targetId: charlie.id },
-  ]);
 
   console.log("Base peuplée ✅");
 }
