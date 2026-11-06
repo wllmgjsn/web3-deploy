@@ -1,10 +1,16 @@
-import { useState, type ChangeEvent } from "react";
 import type { NewExpense } from "../types/Expense";
 import { useForm } from "react-hook-form";
 import useAppContext from "../hooks/useAppContext";
 
 interface ExpenseAddProps {
   addExpense: (expense: NewExpense) => void;
+}
+
+interface ExpenseFormValues {
+  payerId: string;
+  description: string;
+  price: string;
+  categoryId: string;
 }
 
 // function generateRandomExpense(): Expense {
@@ -19,14 +25,11 @@ interface ExpenseAddProps {
 
 // Form component
 function ExpenseAdd({ addExpense }: ExpenseAddProps) {
-  const [payerId, setPayerId] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [categoryId, setCategoryId] = useState("");
+  const { register, handleSubmit, reset } = useForm<ExpenseFormValues>({
+    defaultValues: { payerId: "", description: "", price: "", categoryId: "" },
+  });
 
-  const { handleSubmit } = useForm();
-
-  const { categories } = useAppContext();
+  const { users, categories } = useAppContext();
 
   // useEffect(() => {
   //   console.log(categoryId);
@@ -43,54 +46,35 @@ function ExpenseAdd({ addExpense }: ExpenseAddProps) {
           padding: "1em",
           borderRadius: "1em",
         }}
-        onSubmit={handleSubmit(async () => {
+        onSubmit={handleSubmit((data) => {
           addExpense({
-            amount: Number(price.replace(",", ".")),
+            amount: Number(data.price.replace(",", ".")),
             date: new Date().toISOString(),
-            description: description,
-            payerId: Number(payerId),
-            categoryId: categoryId ? Number(categoryId) : null,
+            description: data.description,
+            payerId: Number(data.payerId),
+            categoryId: data.categoryId ? Number(data.categoryId) : null,
           });
-          setPayerId("");
-          setCategoryId("");
-          setDescription("");
-          setPrice("");
+          reset();
         })}
       >
         <h2>Add a new Expense</h2>
+        <select {...register("payerId", { required: true })}>
+          <option value="">Select a payer</option>
+          {users.map((u) => (
+            <option key={u.id} value={u.id}>
+              {u.name}
+            </option>
+          ))}
+        </select>
         <input
-          type="number"
-          min="1"
-          step="1"
-          value={payerId}
-          placeholder="Enter payer id here"
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setPayerId(e.target.value)
-          }
-          required
-        ></input>
-        <input
-          value={description}
           placeholder="Enter description here"
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setDescription(e.target.value)
-          }
-          required
+          {...register("description", { required: true })}
         ></input>
         <input
-          value={price}
           placeholder="Enter price here"
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setPrice(e.target.value)
-          }
-          required
+          {...register("price", { required: true })}
         ></input>
-        <select
-          value={categoryId}
-          onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-            setCategoryId(e.target.value)
-          }
-        >
+        <select {...register("categoryId")}>
           <option value="">No category</option>
           {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
         </select>
